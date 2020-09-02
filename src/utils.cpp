@@ -6,6 +6,30 @@
 #include "../include/utils.h" 	//INCLUDE HEADER FILE
 
 /**
+ * Compare two vectors element-wise and return whether they are equivalent
+ *
+ * @param vec1	The first vector to compare
+ * @param vec2 	The second vector to compare
+ * @param n 	The length of the vectors
+ * @return 	Whether the two vectors are element-wise equivalent
+ */
+bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n){
+
+	bool comp = true;
+	for(uint32_t i = 0; i < n; i++){
+
+		if(vec1[i] != vec2[i]){
+			comp = false;
+			break;
+		}
+
+	}
+
+	return comp;
+
+}
+
+/**
  * Perform the operation 'base (mod m)'
  *
  * @param base	The base of the expression

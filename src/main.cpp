@@ -23,6 +23,8 @@ int main(int argc, char *argv[]){
 	printVec(out,n);
 	printVec(out2,n);
 
+	cout << (compVec(out, out2, n) ? "PASS" : "FAIL") << endl;
+
 	return 0;
 
 }
