@@ -12,7 +12,7 @@
  * @param m	The modulus of the expression
  * @return 	The result of the expression
  */
-uint32_t modulo(int32_t base, uint32_t m){
+uint32_t modulo(int32_t base, int32_t m){
 
 	int32_t result = base % m;
 	return (result >= 0) ? result : result + m;

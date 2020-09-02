@@ -11,11 +11,14 @@
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
- * @param m	The modulus to be used for the transformation
- * @param prim	The primitive root as applied to length and modulus
+ * @param p	The prime to be used as the modulus of the transformation
+ * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t m, uint32_t prim){
+uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
+
+	uint32_t k = (p - 1)/n;
+	uint32_t a = modExp(r,k,p);
 
 	uint32_t *result;
 	result = (uint32_t *) malloc(n*sizeof(uint32_t));
@@ -26,10 +29,11 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t m, uint32_t prim){
 		temp = 0;
 		for(uint32_t j = 0; j < n; j++){
 
-			temp = temp + modulo(vec[j]*modExp(prim, i*j, m),m);
+			temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);
+			/*temp = temp + vec[j]*modExp(a, i*j, p);*/
 
 		}
-		result[i] = modulo(temp,m);
+		result[i] = modulo(temp,p);
 
 	}
 
@@ -43,17 +47,20 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t m, uint32_t prim){
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
- * @param m	The modulus to be used for the transformation
- * @param prim	The primitive root as applied to length and modulus
+ * @param p	The prime to be used as the modulus of the transformation
+ * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t m, uint32_t prim){
-
+uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
+	
 	if(n == 1){
 		
 		return vec;
 
 	}
+
+	uint32_t k = (p - 1)/n;
+	uint32_t a = modExp(r,k,p);
 
 	uint32_t halfN = n >> 1;
 
@@ -70,17 +77,20 @@ uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t m, uint32_t prim){
 
 	}
 
-	uint32_t *y0 = outOfPlaceNTT(A0, halfN, m, prim);
-	uint32_t *y1 = outOfPlaceNTT(A1, halfN, m, prim);
+	uint32_t *y0 = outOfPlaceNTT(A0, halfN, p, r);
+	uint32_t *y1 = outOfPlaceNTT(A1, halfN, p, r);
+
+	//uint32_t *y0 = naiveNTT(A0, halfN, p, r);
+	//uint32_t *y1 = naiveNTT(A1, halfN, p, r);
 
 	uint32_t *result;
-	result = (uint32_t *) calloc(n, sizeof(uint32_t));
+	result = (uint32_t *) malloc(n*sizeof(uint32_t));
 
 	for(uint32_t i = 0; i < halfN; i++){
 
-		result[i] 		= modulo((int32_t)y0[i] + (int32_t)modulo(modExp(prim,i,m)*y1[i],m),m);
-		result[i + halfN] 	= modulo((int32_t)y0[i] - (int32_t)modulo(modExp(prim,i,m)*y1[i],m),m);
-
+		result[i] 		= modulo(y0[i] + modulo(modExp(a,i,p)*y1[i],p),p);	
+		result[i + halfN] 	= modulo(y0[i] - modulo(modExp(a,i,p)*y1[i],p),p);
+	
 	}
 
 	return result;
