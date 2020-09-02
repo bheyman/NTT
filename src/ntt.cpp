@@ -1,8 +1,9 @@
-#include <cmath>		/* log2(), pow() */
 #include <cstdint>		/* int32_t, uint32_t */
-#include <cstdlib> 		/* calloc() */
+#include <cstdlib> 		/* malloc() */
 
-#include "../include/utils.h"	/* modExp() */
+#include <iostream>
+
+#include "../include/utils.h"	/* modExp(), modulo() */
 
 #include "../include/ntt.h" 	//INCLUDE HEADER FILE
 
@@ -18,7 +19,9 @@
 uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 	uint32_t k = (p - 1)/n;
+	std::cout << "k: " << k << std::endl;
 	uint32_t a = modExp(r,k,p);
+	std::cout << "a: " << a << std::endl;
 
 	uint32_t *result;
 	result = (uint32_t *) malloc(n*sizeof(uint32_t));
@@ -28,9 +31,11 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 		temp = 0;
 		for(uint32_t j = 0; j < n; j++){
-
-			temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);
-			/*temp = temp + vec[j]*modExp(a, i*j, p); ???*/
+	
+			//TODO: problem with N becomes large, i*j overflows??
+			temp = modulo(temp + modulo(vec[j]*modExp(a, i*j, p),p),p);
+			/*temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);*/
+			/*temp = temp + vec[j]*modExp(a, i*j, p);*/
 
 		}
 		result[i] = modulo(temp,p);

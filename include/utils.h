@@ -10,9 +10,10 @@
  * @param vec1	The first vector to compare
  * @param vec2 	The second vector to compare
  * @param n 	The length of the vectors
+ * @param debug	Whether to print debug information (will run entire vector)
  * @return 	Whether the two vectors are element-wise equivalent
  */
-bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n);
+bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n, bool debug=false);
 
 /**
  * Perform the operation 'base (mod m)'

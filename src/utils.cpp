@@ -11,16 +11,22 @@
  * @param vec1	The first vector to compare
  * @param vec2 	The second vector to compare
  * @param n 	The length of the vectors
+ * @param debug	Whether to print debug information (will run entire vector)
  * @return 	Whether the two vectors are element-wise equivalent
  */
-bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n){
+bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n, bool debug){
 
 	bool comp = true;
 	for(uint32_t i = 0; i < n; i++){
 
 		if(vec1[i] != vec2[i]){
 			comp = false;
-			break;
+
+			if(debug){
+				std::cout << "(vec1[" << i << "] : " << vec1[i] << ") != (vec2[" << i << "] : " << vec2[i] << ")" << std::endl;
+			}else{
+				break;
+			}
 		}
 
 	}
@@ -82,10 +88,7 @@ void printVec(uint32_t *vec, uint32_t n){
 	std::cout << "[";
 	for(uint32_t i = 0; i < n; i++){
 
-		std::cout << vec[i];
-		if(i != (n-1)){
-			std::cout << " ";
-		}
+		std::cout << vec[i] << ",";
 
 	}
 	std::cout << "]" << std::endl;
