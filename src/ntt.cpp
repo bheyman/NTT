@@ -82,10 +82,13 @@ uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 	uint32_t *result;
 	result = (uint32_t *) malloc(n*sizeof(uint32_t));
 
+	uint32_t factor;
 	for(uint32_t i = 0; i < halfN; i++){
 
-		result[i] 		= modulo(y0[i] + modulo(modExp(a,i,p)*y1[i],p),p);	
-		result[i + halfN] 	= modulo(y0[i] - modulo(modExp(a,i,p)*y1[i],p),p);
+		factor = modulo(modExp(a,i,p)*y1[i],p);
+
+		result[i] 		= modulo(y0[i] + factor,p);	
+		result[i + halfN] 	= modulo(y0[i] - factor,p);
 	
 	}
 
