@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
 	uint32_t p = 17;
 	uint32_t r = 3;
 
-	uint32_t *vec = randVec(n,10);
+	uint32_t *vec = randVec(n,2048);
 
 	printVec(vec, n);
 

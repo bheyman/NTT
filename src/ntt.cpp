@@ -30,7 +30,7 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 		for(uint32_t j = 0; j < n; j++){
 
 			temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);
-			/*temp = temp + vec[j]*modExp(a, i*j, p);*/
+			/*temp = temp + vec[j]*modExp(a, i*j, p); ???*/
 
 		}
 		result[i] = modulo(temp,p);
@@ -43,7 +43,6 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 /**
  * Perform an out-of-place Cooley-Tukey NTT on an input vector and return the result
- * TODO NOT WORKING
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -79,9 +78,6 @@ uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 	uint32_t *y0 = outOfPlaceNTT(A0, halfN, p, r);
 	uint32_t *y1 = outOfPlaceNTT(A1, halfN, p, r);
-
-	//uint32_t *y0 = naiveNTT(A0, halfN, p, r);
-	//uint32_t *y1 = naiveNTT(A1, halfN, p, r);
 
 	uint32_t *result;
 	result = (uint32_t *) malloc(n*sizeof(uint32_t));
