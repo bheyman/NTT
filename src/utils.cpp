@@ -1,4 +1,4 @@
-#include <cstdint> 		/* uint32_t */
+#include <cstdint> 		/* int64_t, uint64_t */
 #include <cstdlib>		/* srand(), rand() */
 #include <ctime>		/* time() */
 #include <iostream> 		/* std::cout, std::endl */
@@ -14,21 +14,22 @@
  * @param debug	Whether to print debug information (will run entire vector)
  * @return 	Whether the two vectors are element-wise equivalent
  */
-bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n, bool debug){
+bool compVec(uint64_t *vec1, uint64_t *vec2, uint64_t n, bool debug){
 
 	bool comp = true;
-	for(uint32_t i = 0; i < n; i++){
+	for(uint64_t i = 0; i < n; i++){
 
 		if(vec1[i] != vec2[i]){
 			comp = false;
 
 			if(debug){
-				std::cout << "(vec1[" << i << "] : " << vec1[i] << ") != (vec2[" << i << "] : " << vec2[i] << ")" << std::endl;
+				std::cout << "(vec1[" << i << "] : " << vec1[i] << ")";
+				std::cout << "!= (vec2[" << i << "] : " << vec2[i] << ")";
+				std::cout << std::endl;
 			}else{
 				break;
 			}
 		}
-
 	}
 
 	return comp;
@@ -42,9 +43,9 @@ bool compVec(uint32_t *vec1, uint32_t *vec2, uint32_t n, bool debug){
  * @param m	The modulus of the expression
  * @return 	The result of the expression
  */
-uint32_t modulo(int32_t base, int32_t m){
+uint64_t modulo(int64_t base, int64_t m){
 
-	int32_t result = base % m;
+	int64_t result = base % m;
 	return (result >= 0) ? result : result + m;
 
 }
@@ -57,9 +58,9 @@ uint32_t modulo(int32_t base, int32_t m){
  * @param m	The modulus of the expression
  * @return 	The result of the expression
  */
-uint32_t modExp(uint32_t base, uint32_t exp, uint32_t m){
+uint64_t modExp(uint64_t base, uint64_t exp, uint64_t m){
 
-	uint32_t result = 1;
+	uint64_t result = 1;
 	
 	while(exp > 0){
 
@@ -70,7 +71,7 @@ uint32_t modExp(uint32_t base, uint32_t exp, uint32_t m){
 		}
 
 		exp = exp >> 1;
-		base = modulo(base*base, m);
+		base = modulo(base*base,m);
 	}
 
 	return result;
@@ -83,10 +84,10 @@ uint32_t modExp(uint32_t base, uint32_t exp, uint32_t m){
  * @param vec	The array to be displayed
  * @param n	The length of the array
  */
-void printVec(uint32_t *vec, uint32_t n){
+void printVec(uint64_t *vec, uint64_t n){
 
 	std::cout << "[";
-	for(uint32_t i = 0; i < n; i++){
+	for(uint64_t i = 0; i < n; i++){
 
 		std::cout << vec[i] << ",";
 
@@ -101,13 +102,13 @@ void printVec(uint32_t *vec, uint32_t n){
  * @param n	The length of the array
  * @param max	The maximum value for an array element [Default: RAND_MAX]
  */
-uint32_t *randVec(uint32_t n, uint32_t max){
+uint64_t *randVec(uint64_t n, uint64_t max){
 
-	uint32_t *vec;
-	vec = (uint32_t *)malloc(n*sizeof(uint32_t));
+	uint64_t *vec;
+	vec = (uint64_t *)malloc(n*sizeof(uint64_t));
 
 	srand(time(0));
-	for(uint32_t i = 0; i < n; i++){
+	for(uint64_t i = 0; i < n; i++){
 
 		vec[i] = rand()%(max + 1);
 

@@ -1,4 +1,5 @@
-#include <cstdint>		/* uint32_t */
+#include <cstdint>		/* uint64_t */
+#include <ctime>		/* time() */
 
 #include <unistd.h>
 #include <iostream>
@@ -10,22 +11,28 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-	uint32_t n = 16384;
-	uint32_t p = 65537;
-	uint32_t r = 3;
+	uint64_t time_track;
 
-	uint32_t *vec = randVec(n,10);
-	//cout << "vec DONE" << endl;
-	printVec(vec, n);
+	uint64_t n = 32768;
+	uint64_t p = 65537;
+	uint64_t r = 3;
 
-	//uint32_t *out1 = naiveNTT(vec, n, p, r);
-	//cout << "out1 DONE" << endl;
-	uint32_t *out2 = outOfPlaceNTT(vec, n, p, r);
-	//cout << "out2 DONE" << endl;
-	//printVec(out1,n);
-	printVec(out2,n);
+	time_track = time(0);
+	uint64_t *vec = randVec(n,10);
+	time_track = time(0) - time_track;
+	cout << "vec DONE in " << time_track << " seconds" << endl;
 
-	//cout << (compVec(out1, out2, n, true) ? "PASS" : "FAIL") << endl;
+	time_track = time(0);
+	uint64_t *out1 = naiveNTT(vec, n, p, r);	
+	time_track = time(0) - time_track;
+	cout << "out1 DONE in " << time_track << " seconds" << endl;
+
+	time_track = time(0);
+	uint64_t *out2 = outOfPlaceNTT(vec, n, p, r);
+	time_track = time(0) - time_track;
+	cout << "out2 DONE in " << time_track << " seconds" << endl;
+
+	cout << (compVec(out1, out2, n, true) ? "PASS" : "FAIL") << endl;
 	cout << endl;
 
 	return 0;

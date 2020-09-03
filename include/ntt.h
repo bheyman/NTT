@@ -1,7 +1,7 @@
 #ifndef NTT_H
 #define NTT_H
 
-#include <cstdint> 	/* uint32_t */
+#include <cstdint> 	/* uint64_t */
 
 /**
  * Perform a basic NTT on an input vector and return the result
@@ -12,7 +12,7 @@
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r);
+uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
 /**
  * Perform an out-of-place Cooley-Tukey NTT on an input vector and return the result
@@ -23,8 +23,8 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r);
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r);
+uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
-uint32_t *inPlaceNTT(uint32_t *vec, uint32_t n);
+uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n);
 
 #endif

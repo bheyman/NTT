@@ -1,7 +1,5 @@
-#include <cstdint>		/* int32_t, uint32_t */
+#include <cstdint>		/* uint64_t */
 #include <cstdlib> 		/* malloc() */
-
-#include <iostream>
 
 #include "../include/utils.h"	/* modExp(), modulo() */
 
@@ -16,23 +14,23 @@
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
+uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
-	uint32_t k = (p - 1)/n;
-	std::cout << "k: " << k << std::endl;
-	uint32_t a = modExp(r,k,p);
-	std::cout << "a: " << a << std::endl;
+	uint64_t k = (p - 1)/n;
+	uint64_t a = modExp(r,k,p);
 
-	uint32_t *result;
-	result = (uint32_t *) malloc(n*sizeof(uint32_t));
+	uint64_t *result;
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
-	uint32_t temp;
-	for(uint32_t i = 0; i < n; i++){
+	uint64_t temp;
+	for(uint64_t i = 0; i < n; i++){
 
 		temp = 0;
-		for(uint32_t j = 0; j < n; j++){
+		for(uint64_t j = 0; j < n; j++){
 	
-			//TODO: problem with N becomes large, i*j overflows??
+			//TODO: problem with n becomes large, i*j overflows??
+			//modExp() does not work for very large numbers in general
+			//modulo() may also not work for very large numbers
 			temp = modulo(temp + modulo(vec[j]*modExp(a, i*j, p),p),p);
 			/*temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);*/
 			/*temp = temp + vec[j]*modExp(a, i*j, p);*/
@@ -55,7 +53,7 @@ uint32_t *naiveNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
+uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 	
 	if(n == 1){
 		
@@ -63,32 +61,32 @@ uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 	}
 
-	uint32_t k = (p - 1)/n;
-	uint32_t a = modExp(r,k,p);
+	uint64_t k = (p - 1)/n;
+	uint64_t a = modExp(r,k,p);
 
-	uint32_t halfN = n >> 1;
+	uint64_t halfN = n >> 1;
 
-	uint32_t *A0;
-	A0 = (uint32_t *) malloc(halfN * sizeof(uint32_t));
+	uint64_t *A0;
+	A0 = (uint64_t *) malloc(halfN * sizeof(uint64_t));
 
-	uint32_t *A1;
-	A1 = (uint32_t *) malloc(halfN * sizeof(uint32_t));
+	uint64_t *A1;
+	A1 = (uint64_t *) malloc(halfN * sizeof(uint64_t));
 
-	for(uint32_t i = 0; i < halfN; i++){
+	for(uint64_t i = 0; i < halfN; i++){
 
 		A0[i] = vec[i*2];
 		A1[i] = vec[i*2 + 1];
 
 	}
 
-	uint32_t *y0 = outOfPlaceNTT(A0, halfN, p, r);
-	uint32_t *y1 = outOfPlaceNTT(A1, halfN, p, r);
+	uint64_t *y0 = outOfPlaceNTT(A0, halfN, p, r);
+	uint64_t *y1 = outOfPlaceNTT(A1, halfN, p, r);
 
-	uint32_t *result;
-	result = (uint32_t *) malloc(n*sizeof(uint32_t));
+	uint64_t *result;
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
-	uint32_t factor;
-	for(uint32_t i = 0; i < halfN; i++){
+	uint64_t factor;
+	for(uint64_t i = 0; i < halfN; i++){
 
 		factor = modulo(modExp(a,i,p)*y1[i],p);
 
@@ -101,10 +99,10 @@ uint32_t *outOfPlaceNTT(uint32_t *vec, uint32_t n, uint32_t p, uint32_t r){
 
 }
 
-uint32_t *inPlaceNTT(uint32_t *vec, uint32_t n){
+uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n){
 
-	uint32_t *result;
-	result = (uint32_t *) calloc(n, sizeof(uint32_t));
+	uint64_t *result;
+	result = (uint64_t *) calloc(n, sizeof(uint64_t));
 
 	return result;
 

@@ -11,3 +11,5 @@ p	= 5
 k 	= 2
 
 r	= 2
+
+if my understanding holds, this should now work up to 63 bit primes
