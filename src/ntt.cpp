@@ -95,6 +95,10 @@ uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 	
 	}
 
+//	std::cout << "n: " << n << std::endl;
+//	printVec(result,n);
+//	std::cout << std::endl;
+
 	return result;
 
 }
@@ -106,6 +110,47 @@ uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 	result = bit_reverse(vec,n);
 
+	uint64_t m,k_,a,factor1,factor2;
+	for(uint64_t i = 1; i <= log2(n); i++){
+
+		//std::cout << "Layer: " << i << std::endl;
+		
+		m = pow(2,i);
+		//std::cout << "m:     " << m << std::endl;
+
+		k_ = (p - 1)/m;
+		a = modExp(r,k_,p);
+
+		//std::cout << "a:     " << a << std::endl;
+
+		for(uint64_t j = 0; j <= m/2 - 1; j++){
+
+			//std::cout << "j:     " << j << std::endl;
+
+			for(uint64_t k = j; k <= n-1; k+=m){
+
+//				std::cout << "k:     " << k << std::endl;
+//				std::cout << "k+m/2: " << k + m/2 << std::endl;
+//				std::cout << std::endl;
+
+				factor1 = result[k];
+				factor2 = modulo(modExp(a,j,p)*result[k + m/2],p);
+
+//				std::cout << "factor1: " << factor1 << std::endl;
+//				std::cout << "factor2: " << factor2 << std::endl;
+
+				result[k] 	= modulo(factor1 + factor2, p);
+				result[k+m/2] 	= modulo(factor1 - factor2, p);
+
+			}
+/*
+			//std::cout << "i: " << i << ",j: " << j << std::endl;
+			printVec(result,n);
+			std::cout << std::endl;
+*/
+		}
+
+	}
 
 	return result;
 

@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 	uint64_t n = 8;
 	uint64_t p = 17;
 	uint64_t r = 3;	
-
+	
 	time_track = time(0);
 	uint64_t *vec = randVec(n,10);
 	time_track = time(0) - time_track;
@@ -44,8 +44,6 @@ int main(int argc, char *argv[]){
 
 	cout << (compVec(out1, out2, n) && compVec(out2, out3, n) ? "PASS" : "FAIL") << endl;
 	cout << endl;
-	
-	
 	
 	return 0;
 
