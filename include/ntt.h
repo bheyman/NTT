@@ -25,6 +25,6 @@ uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  */
 uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
-uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n);
+uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
 #endif

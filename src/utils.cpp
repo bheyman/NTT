@@ -1,9 +1,37 @@
+#include <cmath>		/* log2() */
 #include <cstdint> 		/* int64_t, uint64_t */
 #include <cstdlib>		/* srand(), rand() */
 #include <ctime>		/* time() */
 #include <iostream> 		/* std::cout, std::endl */
 
 #include "../include/utils.h" 	//INCLUDE HEADER FILE
+
+uint64_t *bit_reverse(uint64_t *vec, uint64_t n){
+
+	uint64_t num_bits = log2(n);
+
+	uint64_t *result;
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
+
+	uint64_t reverse_num;
+	for(uint64_t i = 0; i < n; i++){
+
+		reverse_num = 0;
+		for(uint64_t j = 0; j < num_bits; j++){
+
+			reverse_num = reverse_num << 1;
+			if(i & (1 << j)){
+				reverse_num = reverse_num | 1;
+			}
+		}
+
+		result[reverse_num] = vec[i];
+
+	}
+
+	return result;
+
+}
 
 /**
  * Compare two vectors element-wise and return whether they are equivalent

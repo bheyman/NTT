@@ -1,7 +1,10 @@
+#include <cmath>		/* log2() */
 #include <cstdint>		/* uint64_t */
 #include <cstdlib> 		/* malloc() */
 
-#include "../include/utils.h"	/* modExp(), modulo() */
+#include <iostream>
+
+#include "../include/utils.h"	/* bit_reverse(), modExp(), modulo() */
 
 #include "../include/ntt.h" 	//INCLUDE HEADER FILE
 
@@ -28,9 +31,6 @@ uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 		temp = 0;
 		for(uint64_t j = 0; j < n; j++){
 	
-			//TODO: problem with n becomes large, i*j overflows??
-			//modExp() does not work for very large numbers in general
-			//modulo() may also not work for very large numbers
 			temp = modulo(temp + modulo(vec[j]*modExp(a, i*j, p),p),p);
 			/*temp = temp + modulo(vec[j]*modExp(a, i*j, p),p);*/
 			/*temp = temp + vec[j]*modExp(a, i*j, p);*/
@@ -99,10 +99,13 @@ uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 }
 
-uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n){
+uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 	uint64_t *result;
-	result = (uint64_t *) calloc(n, sizeof(uint64_t));
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
+
+	result = bit_reverse(vec,n);
+
 
 	return result;
 

@@ -4,6 +4,8 @@
 #include <cstdint> 	/* int64_t, uint64_t */
 #include <cstdlib>	/* RAND_MAX */
 
+uint64_t *bit_reverse(uint64_t *vec, uint64_t n);
+
 /**
  * Compare two vectors element-wise and return whether they are equivalent
  *
