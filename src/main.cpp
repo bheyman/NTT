@@ -21,7 +21,6 @@ int main(int argc, char *argv[]){
 	uint64_t *vec = randVec(n,10);
 	time_track = time(0) - time_track;
 	cout << "vec DONE in " << time_track << " seconds" << endl;
-
 	printVec(vec,n);
 	
 	time_track = time(0);

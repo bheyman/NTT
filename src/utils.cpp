@@ -6,6 +6,13 @@
 
 #include "../include/utils.h" 	//INCLUDE HEADER FILE
 
+/**
+ * Return vector with each element of the input at its bit-reversed position
+ *
+ * @param vec The vector to bit reverse
+ * @param n   The length of the vector, must be a power of two
+ * @return    The bit reversed vector
+ */
 uint64_t *bit_reverse(uint64_t *vec, uint64_t n){
 
 	uint64_t num_bits = log2(n);
