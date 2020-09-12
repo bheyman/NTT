@@ -15,7 +15,7 @@
 uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
 /**
- * Perform an out-of-place Cooley-Tukey NTT on an input vector and return the result
+ * Perform an out-of-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -23,10 +23,13 @@ uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
+uint64_t *outOfPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
+
+
+uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
 /**
- * Perform an in-place Cooley-Tukey NTT on an input vector and return the result
+ * Perform an in-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -34,6 +37,6 @@ uint64_t *outOfPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint64_t *inPlaceNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
+uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
 
 #endif
