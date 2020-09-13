@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-	uint64_t k = 2;
+	uint64_t k = 3;
 
 	uint64_t n = pow(2,k);
 	uint64_t p = 4046849;
@@ -24,9 +24,9 @@ int main(int argc, char *argv[]){
 
 	printVec(out1,n);
 
-	uint64_t *out2 = outOfPlaceNTT_DIT(vec, n, p, r);
+	uint64_t *out2 = outOfPlaceNTT_DIF(vec, n, p, r);
 
-	printVec(out2,n);
+	printVec(bit_reverse(out2,n),n);
 
 	cout << compVec(out1,out2,n) << endl;
 

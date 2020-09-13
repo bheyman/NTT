@@ -102,7 +102,9 @@ uint64_t *outOfPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 	if(n == 1){
+	
 		return vec;
+	
 	}
 
 	uint64_t k = (p - 1)/n;
@@ -118,8 +120,8 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 	for(uint64_t i = 0; i < halfN; i++){
 
-		A0[i] = vec[i];
-		A1[i] = vec[i+halfN];
+		A0[i] = modulo(vec[i] + vec[i+halfN],p);
+		A1[i] = modulo((vec[i] - vec[i+halfN])*modExp(a,i,p),p);
 
 	}
 
@@ -129,13 +131,10 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 	uint64_t *result;
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
-	uint64_t factor;
 	for(uint64_t i = 0; i < halfN; i++){
 
-		factor = modulo(modExp(a,i,p)*y1[i],p);
-
-		result[i*2] 	= modulo(y0[i] + factor,p);
-		result[i*2+1]	= modulo(y0[i] - factor,p);
+		result[i] = y0[i];
+		result[i + halfN] = y1[i];
 
 	}
 
