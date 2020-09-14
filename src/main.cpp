@@ -19,17 +19,22 @@ int main(int argc, char *argv[]){
 	uint64_t r = 3;	
 	
 	uint64_t *vec = randVec(n,10);
-	cout << &vec << endl;
+	printVec(vec,n);
 
 	uint64_t *out1 = naiveNTT(vec,n,p,r);
-	cout << &out1 << endl;
-	
-	uint64_t *out2 = inPlaceNTT_DIF(vec,n,p,r);
-	cout << &out2 << endl;
-
 	printVec(out1,n);
+
+	uint64_t *out2 = outOfPlaceNTT_DIT(vec,n,p,r);
 	printVec(out2,n);
 
+	uint64_t *out3 = outOfPlaceNTT_DIF(vec,n,p,r);
+	printVec(bit_reverse(out3,n),n);
+
+	uint64_t *out4 = inPlaceNTT_DIT(vec,n,p,r);
+	printVec(out4,n);
+
+	uint64_t *out5 = inPlaceNTT_DIF(vec,n,p,r);
+	printVec(out5,n);
 
 	return 0;
 
