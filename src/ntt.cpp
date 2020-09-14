@@ -206,7 +206,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 	uint64_t *result;
-	(uint64_t *) malloc(n*sizeof(uint64_t));
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
 	for(uint64_t i = 0; i < n; i++){
 
@@ -238,6 +238,6 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 		}
 	}
 
-	return result;
+	return bit_reverse(result,n);
 
 }
