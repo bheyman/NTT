@@ -45,7 +45,7 @@ uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 }
 
 /**
- * Perform an out-of-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
+ * Perform an out-of-place decimation-in-time depth-first Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -153,7 +153,7 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 }
 
 /**
- * Perform an in-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
+ * Perform an in-place decimation-in-time breadth-first Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -167,7 +167,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
 	result = bit_reverse(vec,n);
-
+	
 	uint64_t m,k_,a,factor1,factor2;
 	for(uint64_t i = 1; i <= log2(n); i++){
 
@@ -176,9 +176,9 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 		k_ = (p - 1)/m;
 		a = modExp(r,k_,p);
 
-		for(uint64_t j = 0; j <= m/2 - 1; j++){
+		for(uint64_t j = 0; j < m/2; j++){
 
-			for(uint64_t k = j; k <= n-1; k+=m){
+			for(uint64_t k = j; k < n; k+=m){
 
 				factor1 = result[k];
 				factor2 = modulo(modExp(a,j,p)*result[k + m/2],p);
@@ -195,7 +195,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 }
 
 /**
- * Perform an in-place decimation-in-frequency Cooley-Tukey NTT on an input vector and return the result
+ * Perform an in-place decimation-in-frequency breadth-first Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -209,9 +209,7 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
 	for(uint64_t i = 0; i < n; i++){
-
 		result[i] = vec[i];
-
 	}
 
 	uint64_t m,k_,a,factor1,factor2;
@@ -224,7 +222,7 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 
 		for(uint64_t j = 0; j < n/m; j++){
 
-			for(uint64_t k = 0; k <= m/2 - 1; k++){
+			for(uint64_t k = 0; k < m/2; k++){
 
 				factor1 = result[m*j + k];
 				factor2 = result[m*j + k + m/2];

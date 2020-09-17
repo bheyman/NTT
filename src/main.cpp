@@ -36,6 +36,13 @@ int main(int argc, char *argv[]){
 	uint64_t *out5 = inPlaceNTT_DIF(vec,n,p,r);
 	printVec(out5,n);
 
+	uint64_t *out6 = inPlaceNTT_DIT(out5,n,p,6);
+
+	for(uint64_t i = 0; i < n; i++){
+		out6[i] = modulo(out6[i]*15,p);
+	}
+	printVec(out6,n);
+
 	return 0;
 
 }
