@@ -176,23 +176,22 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool
 	}
 
 	uint64_t m,k_,a,factor1,factor2;
-	for(uint64_t i = 1; i <= log2(n); i++){
+	for(uint64_t i = 1; i <= log2(n); i++){ 
 
 		m = pow(2,i);
 
 		k_ = (p - 1)/m;
 		a = modExp(r,k_,p);
 
-		//TODO: figure out why loop structure is what it is
-		for(uint64_t j = 0; j < m/2; j++){
+		for(uint64_t j = 0; j < n; j+=m){
 
-			for(uint64_t k = j; k < n; k+=m){
+			for(uint64_t k = 0; k < m/2; k++){
 
-				factor1 = result[k];
-				factor2 = modulo(modExp(a,j,p)*result[k + m/2],p);
+				factor1 = result[j + k];
+				factor2 = modulo(modExp(a,k,p)*result[j + k + m/2],p);
 				
-				result[k] 	= modulo(factor1 + factor2, p);
-				result[k+m/2] 	= modulo(factor1 - factor2, p);
+				result[j + k] 		= modulo(factor1 + factor2, p);
+				result[j + k+m/2] 	= modulo(factor1 - factor2, p);
 
 			}
 		}
@@ -229,17 +228,15 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool
 		k_ = (p - 1)/m;
 		a = modExp(r,k_,p);
 
-		for(uint64_t j = 0; j < n/m; j++){
+		for(uint64_t j = 0; j < n; j+=m){
 
 			for(uint64_t k = 0; k < m/2; k++){
 
-				factor1 = result[m*j + k];
-				factor2 = result[m*j + k + m/2];
+				factor1 = result[j + k];
+				factor2 = result[j + k + m/2];
 
-				result[m*j + k] 	= modulo(factor1 + factor2,p);
-				result[m*j + k + m/2]	= modulo(factor1 - factor2,p);
-
-				result[m*j + k + m/2] = modulo(result[m*j + k + m/2]*modExp(a,k,p),p);
+				result[j + k] 		= modulo(factor1 + factor2,p);
+				result[j + k + m/2]	= modulo(modExp(a,k,p)*modulo(factor1 - factor2,p),p);
 
 			}
 		}

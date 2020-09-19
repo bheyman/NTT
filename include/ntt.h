@@ -44,6 +44,7 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  * @param n	The size of the input vector
  * @param p	The prime to be used as the modulus of the transformation
  * @param r	The primitive root of the prime
+ * @param rev	Whether to perform bit reversal on the input vector
  * @return 	The transformed vector
  */
 uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev=true);
@@ -55,6 +56,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool
  * @param n	The size of the input vector
  * @param p	The prime to be used as the modulus of the transformation
  * @param r	The primitive root of the prime
+ * @param rev	Whether to perform bit reversal on the output vector
  * @return 	The transformed vector
  */
 uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev=true);
