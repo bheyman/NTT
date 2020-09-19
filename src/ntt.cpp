@@ -159,15 +159,22 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
  * @param n	The size of the input vector
  * @param p	The prime to be used as the modulus of the transformation
  * @param r	The primitive root of the prime
+ * @param rev	Whether to perform bit reversal on the input vector
  * @return 	The transformed vector
  */
-uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
+uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev){
 
 	uint64_t *result;
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
 
-	result = bit_reverse(vec,n);
-	
+	if(rev){
+		result = bit_reverse(vec,n);
+	}else{
+		for(uint64_t i = 0; i < n; i++){	
+			result[i] = vec[i];
+		}
+	}
+
 	uint64_t m,k_,a,factor1,factor2;
 	for(uint64_t i = 1; i <= log2(n); i++){
 
@@ -176,6 +183,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 		k_ = (p - 1)/m;
 		a = modExp(r,k_,p);
 
+		//TODO: figure out why loop structure is what it is
 		for(uint64_t j = 0; j < m/2; j++){
 
 			for(uint64_t k = j; k < n; k+=m){
@@ -201,9 +209,10 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
  * @param n	The size of the input vector
  * @param p	The prime to be used as the modulus of the transformation
  * @param r	The primitive root of the prime
+ * @param rev	Whether to perform bit reversal on the output vector
  * @return 	The transformed vector
  */
-uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
+uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev){
 
 	uint64_t *result;
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
@@ -235,7 +244,10 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 			}
 		}
 	}
-
-	return bit_reverse(result,n);
-
+	
+	if(rev){
+		return bit_reverse(result,n);
+	}else{
+		return result;
+	}
 }

@@ -46,7 +46,7 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
+uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev=true);
 
 /**
  * Perform an in-place decimation-in-frequency Cooley-Tukey NTT on an input vector and return the result
@@ -57,6 +57,6 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
  * @param r	The primitive root of the prime
  * @return 	The transformed vector
  */
-uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r);
+uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev=true);
 
 #endif

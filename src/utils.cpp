@@ -72,20 +72,6 @@ bool compVec(uint64_t *vec1, uint64_t *vec2, uint64_t n, bool debug){
 }
 
 /**
- * Perform the operation 'base (mod m)'
- *
- * @param base	The base of the expression
- * @param m	The modulus of the expression
- * @return 	The result of the expression
- */
-uint64_t modulo(int64_t base, int64_t m){
-
-	int64_t result = base % m;
-	return (result >= 0) ? result : result + m;
-
-}
-
-/**
  * Perform the operation 'base^exp (mod m)' using the memory-efficient method
  *
  * @param base	The base of the expression
@@ -110,6 +96,20 @@ uint64_t modExp(uint64_t base, uint64_t exp, uint64_t m){
 	}
 
 	return result;
+
+}
+
+/**
+ * Perform the operation 'base (mod m)'
+ *
+ * @param base	The base of the expression
+ * @param m	The modulus of the expression
+ * @return 	The result of the expression
+ */
+uint64_t modulo(int64_t base, int64_t m){
+
+	int64_t result = base % m;
+	return (result >= 0) ? result : result + m;
 
 }
 
