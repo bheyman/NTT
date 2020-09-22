@@ -72,6 +72,44 @@ bool compVec(uint64_t *vec1, uint64_t *vec2, uint64_t n, bool debug){
 }
 
 /**
+ * Generate the twiddle factors needed for an n length NTT
+ *  
+ * @param n	The length of the NTT
+ * @param p	The prime used for the NTT
+ * @param r	The primitive root of the prime p
+ * @return	A list of all twiddle factors necessary for an n length DIT NTT
+ */
+uint64_t *generateTwiddle_DIT(uint64_t n, uint64_t p, uint64_t r){
+
+	uint64_t numTwiddle = 0;
+	for(uint64_t i = 1; i <= log2(n); i++){
+		numTwiddle += n / pow(2,i);
+	}
+
+	uint64_t *twiddleList;
+	twiddleList = (uint64_t *) malloc(numTwiddle*sizeof(uint64_t));
+
+	uint64_t m,k,a;
+	for(uint64_t i = 1; i <= log2(n); i++){
+
+		m = pow(2,i);
+
+		k = (p - 1)/m;
+		a = modExp(r,k,p);
+
+		for(uint64_t j = 0; j < m/2; j++){
+
+			twiddleList[(uint64_t)pow(2,i-1) - 1 + j] = modExp(a,j,p);
+		
+		}
+
+	}
+
+	return twiddleList;
+
+}
+
+/**
  * Perform the operation 'base^exp (mod m)' using the memory-efficient method
  *
  * @param base	The base of the expression

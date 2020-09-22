@@ -25,6 +25,16 @@ uint64_t *bit_reverse(uint64_t *vec, uint64_t n);
 bool compVec(uint64_t *vec1, uint64_t *vec2, uint64_t n, bool debug=false);
 
 /**
+ * Generate the twiddle factors needed for an n length NTT
+ *  
+ * @param n	The length of the NTT
+ * @param p	The prime used for the NTT
+ * @param r	The primitive root of the prime p
+ * @return	A list of all twiddle factors necessary for an n length DIT NTT
+ */
+uint64_t *generateTwiddle_DIT(uint64_t n, uint64_t p, uint64_t r);
+
+/**
  * Perform the operation 'base^exp (mod m)' using the memory-efficient method
  *
  * @param base	The base of the expression
