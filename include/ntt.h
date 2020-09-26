@@ -75,4 +75,6 @@ uint64_t *inPlaceNTT_DIT_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t
  */
 uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool rev=true);
 
+uint64_t *fourStepNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t n1);
+
 #endif

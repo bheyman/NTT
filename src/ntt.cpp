@@ -334,3 +334,113 @@ uint64_t *inPlaceNTT_DIF_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t
 		return result;
 	}
 }
+
+uint64_t *fourStepNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t n2){
+
+	uint64_t n1 = n/n2;
+	
+	uint64_t *result;
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
+
+	for(uint64_t i = 0; i < n; i++){
+		result[i] = vec[i];
+	}
+
+	std::cout << std::endl;
+	printVec(result,n);
+
+	/* Perform NTT on n1 rows */
+
+	uint64_t *temp;
+	for(uint64_t i = 0; i < n1; i++){
+
+		//NTT ON COLUMN
+		temp = inPlaceNTT_DIT(vec + i*n2, n2, p, r);
+		for(uint64_t j = 0; j < n2; j++){
+
+			result[i*n2 + j] = temp[j];
+
+		}
+
+	}
+
+	printVec(result,n);	
+
+	/* Multiply each term by twiddle factor */
+
+	uint64_t k = (p - 1)/n;
+	uint64_t a = modExp(r,k,p);
+
+	//FOR EVERY ROW
+	for(uint64_t i = 0; i < n1; i++){
+
+		//FOR EVERY COLUMN
+		for(uint64_t j = 0; j < n2; j++){
+
+			result[i*n2 + j] = modulo(result[i*n2 + j]*modExp(a,i*j,p),p);
+		}
+	}
+
+	printVec(result,n);	
+	
+	/* Transpose n1xn2 matrix into n2xn1 matrix */
+
+	uint64_t *trans;
+	trans = (uint64_t *) malloc(n*sizeof(uint64_t));
+
+	//FOR EVERY ROW
+	for(uint64_t i = 0; i < n1; i++){
+
+		//FOR EVERY COLUMN
+		for(uint64_t j = 0; j < n2; j++){
+
+			trans[j*n1 + i] = result[i*n2 + j];
+
+		}
+
+	}
+
+	for(uint64_t i = 0; i < n; i++){
+		result[i] = trans[i];
+	}
+
+	printVec(result,n);
+
+	/* Perform NTT on n2 rows TODO: Failing?*/
+
+	//FOR EVERY ROW
+	for(uint64_t i = 0; i < n2; i++){
+
+		//NTT ON COLUMN
+		temp = inPlaceNTT_DIT(vec + i*n1, n1, p, r);
+		for(uint64_t j = 0; j < n1; j++){
+
+			result[i*n1 + j] = temp[j];
+
+		}
+
+	}
+	
+	printVec(result,n);	
+	
+	/* Transpost n2xn1 matrix into n1xn2 matrix */
+
+	//FOR EVERY ROW
+	for(uint64_t i = 0; i < n2; i++){
+
+		//FOR EVERY COLUMN
+		for(uint64_t j = 0; j < n1; j++){
+
+			trans[j*n2 + i] = result[i*n1 + j];
+
+		}
+
+	}
+
+	for(uint64_t i = 0; i < n; i++){
+		result[i] = trans[i];
+	}
+
+	return result;
+
+}

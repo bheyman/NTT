@@ -18,30 +18,15 @@ int main(int argc, char *argv[]){
 	uint64_t p = 17;
 	uint64_t r = 3;	
 	
-	uint64_t *vec = randVec(n,10);
+	//uint64_t *vec = randVec(n,10);
+	uint64_t vec[8] = {0,1,2,3,4,5,6,7};
 	printVec(vec,n);
 
 	uint64_t *out1 = naiveNTT(vec,n,p,r);
 	printVec(out1,n);
 
-	uint64_t *out2 = outOfPlaceNTT_DIT(vec,n,p,r);
+	uint64_t *out2 = fourStepNTT(vec,n,p,r,2);
 	printVec(out2,n);
-
-	uint64_t *out3 = outOfPlaceNTT_DIF(vec,n,p,r);
-	printVec(bit_reverse(out3,n),n);
-
-	uint64_t *out4 = inPlaceNTT_DIT(vec,n,p,r);
-	printVec(out4,n);
-
-	uint64_t *out5 = inPlaceNTT_DIF(vec,n,p,r);
-	printVec(out5,n);
-
-	uint64_t *out6 = inPlaceNTT_DIT(out5,n,p,6);
-
-	for(uint64_t i = 0; i < n; i++){
-		out6[i] = modulo(out6[i]*15,p);
-	}
-	printVec(out6,n);
 
 	return 0;
 
