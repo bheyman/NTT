@@ -14,18 +14,6 @@ r	= 2
 
 if my understanding holds, this should now work up to 63 bit primes
 
-Intel Core i5-8600K
-
-Cores: 		6
-Threads: 	6
-Base Frequency:	3.60 GHz
-
-L1-I: 		192 KB	6x32 KB		8-way set associative	write-back
-L1-D:		192 KB	6x32 KB		8-way set associative	write-back
-L2:		1.5 MB	6x256 KB	4-way set associative	write-back
-L3:		9   MB	6x1.5 MB	12-way set associative	write-back
-
-
 To inverse:
 1) perform an NTT with the modulo inverse of the original root
 2) multiply each element with the modulo inverse of the length, modulo the modulus
