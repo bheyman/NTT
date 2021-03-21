@@ -18,14 +18,6 @@ int main(int argc, char *argv[]){
 	uint64_t p = 17;
 	uint64_t r = 3;	
 	
-	//uint64_t *vec = randVec(n,10);
-	uint64_t vec[8] = {0,1,2,3,4,5,6,7};
-
-	uint64_t *out1 = naiveNTT(vec,n,p,r);
-	printVec(out1,n);
-
-	uint64_t *out2 = fourStepNTT(vec,n,p,r,2);
-	printVec(out2,n);
 
 	return 0;
 

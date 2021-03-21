@@ -45,7 +45,7 @@ uint64_t *naiveNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 }
 
 /**
- * Perform an out-of-place decimation-in-time depth-first Cooley-Tukey NTT on an input vector and return the result
+ * Perform an out-of-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -153,7 +153,7 @@ uint64_t *outOfPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r){
 }
 
 /**
- * Perform an in-place iterative breadth-first decimation-in-time Cooley-Tukey NTT on an input vector and return the result
+ * Perform an in-place decimation-in-time Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -202,55 +202,7 @@ uint64_t *inPlaceNTT_DIT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool
 }
 
 /**
- * Perform an in-place iterative breadth-first decimation-in-time Cooley-Tukey NTT on an input vector using precomputed 
- * twiddle factors and return the result
- *
- * @param vec 		The input vector to be transformed
- * @param n		The size of the input vector
- * @param p		The prime to be used as the modulus of the transformation
- * @param r		The primitive root of the prime
- * @param twiddle	The precomputed list of necessary twiddle factors
- * @param rev		Whether to perform bit reversal on the input vector
- * @return 		The transformed vector
- */
-uint64_t *inPlaceNTT_DIT_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t *twiddle, bool rev){
-
-	uint64_t *result;
-	result = (uint64_t *) malloc(n*sizeof(uint64_t));
-
-	if(rev){
-		result = bit_reverse(vec,n);
-	}else{
-		for(uint64_t i = 0; i < n; i++){	
-			result[i] = vec[i];
-		}
-	}
-
-	uint64_t m,factor1,factor2;
-	for(uint64_t i = 1; i <= log2(n); i++){ 
-
-		m = pow(2,i);
-
-		for(uint64_t j = 0; j < n; j+=m){
-
-			for(uint64_t k = 0; k < m/2; k++){
-
-				factor1 = result[j + k];
-				factor2 = modulo(twiddle[(uint64_t)pow(2,i-1) - 1 + k]*result[j + k + m/2],p);
-
-				result[j + k] 		= modulo(factor1 + factor2, p);
-				result[j + k+m/2] 	= modulo(factor1 - factor2, p);
-
-			}
-		}
-	}
-
-	return result;
-
-}
-
-/**
- * Perform an in-place iterative breadth-first decimation-in-frequency Cooley-Tukey NTT on an input vector and return the result
+ * Perform an in-place decimation-in-frequency Cooley-Tukey NTT on an input vector and return the result
  *
  * @param vec 	The input vector to be transformed
  * @param n	The size of the input vector
@@ -297,7 +249,57 @@ uint64_t *inPlaceNTT_DIF(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, bool
 	}
 }
 
+/**
+ * Perform an in-place decimation-in-time Cooley-Tukey NTT on an input vector using precomputed 
+ * twiddle factors and return the result
+ *
+ * @param vec 		The input vector to be transformed
+ * @param n		The size of the input vector
+ * @param p		The prime to be used as the modulus of the transformation
+ * @param r		The primitive root of the prime
+ * @param twiddle	The precomputed list of necessary twiddle factors
+ * @param rev		Whether to perform bit reversal on the input vector
+ * @return 		The transformed vector
+ */
+uint64_t *inPlaceNTT_DIT_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t *twiddle, bool rev){
+
+	uint64_t *result;
+	result = (uint64_t *) malloc(n*sizeof(uint64_t));
+
+	if(rev){
+		result = bit_reverse(vec,n);
+	}else{
+		for(uint64_t i = 0; i < n; i++){	
+			result[i] = vec[i];
+		}
+	}
+
+	uint64_t m,factor1,factor2;
+	for(uint64_t i = 1; i <= log2(n); i++){ 
+
+		m = pow(2,i);
+
+		for(uint64_t j = 0; j < n; j+=m){
+
+			for(uint64_t k = 0; k < m/2; k++){
+
+				factor1 = result[j + k];
+				factor2 = modulo(twiddle[(uint64_t)pow(2,i-1) - 1 + k]*result[j + k + m/2],p);
+
+				result[j + k] 		= modulo(factor1 + factor2, p);
+				result[j + k+m/2] 	= modulo(factor1 - factor2, p);
+
+			}
+		}
+	}
+
+	return result;
+
+}
+
 uint64_t *inPlaceNTT_DIF_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t *twiddle, bool rev){
+
+	/* TODO: I don't think this works yet */
 
 	uint64_t *result;
 	result = (uint64_t *) malloc(n*sizeof(uint64_t));
@@ -333,80 +335,4 @@ uint64_t *inPlaceNTT_DIF_precomp(uint64_t *vec, uint64_t n, uint64_t p, uint64_t
 	}else{
 		return result;
 	}
-}
-
-/**
- * ???
- *
- * @param vec 	The input vector to be transformed
- * @param n	The size of the input vector
- * @param p	The prime to be used as the modulus of the transformation
- * @param r	The primitive root of the prime
- * @param n2	The second factor of the vector decomposition
- * @return 	The transformed vector
- */
-uint64_t *fourStepNTT(uint64_t *vec, uint64_t n, uint64_t p, uint64_t r, uint64_t n2){
-
-	uint64_t n1 = n/n2;
-	
-	uint64_t *result;
-	result = (uint64_t *) malloc(n*sizeof(uint64_t));
-
-	for(uint64_t i = 0; i < n; i++){
-		result[i] = vec[i];
-	}
-
-	//NTT ON N1
-	uint64_t *temp;
-	for(uint64_t i = 0; i < n1; i++){
-		temp = inPlaceNTT_DIT(vec + i*n2, n2, p, r);
-		for(uint64_t j = 0; j < n2; j++){
-			result[i*n2 + j] = temp[j];
-		}
-	}
-
-	//TWIDDLE FACTOR
-	uint64_t k = (p - 1)/n;
-	uint64_t a = modExp(r,k,p);
-
-	for(uint64_t i = 0; i < n1; i++){
-		for(uint64_t j = 0; j < n2; j++){
-			result[i*n2 + j] = modulo(result[i*n2 + j]*modExp(a,i*j,p),p);
-		}
-	}
-	
-
-	//TRANSPOSE
-	uint64_t *transpose;
-	transpose = (uint64_t *) malloc(n*sizeof(uint64_t));
-
-	for(uint64_t i = 0; i < n1; i++){
-		for(uint64_t j = 0; j < n2; j++){
-			transpose[j*n1 + i] = result[i*n2 + j];
-		}
-	}
-	for(uint64_t i = 0; i < n; i++){
-		result[i] = transpose[i];
-	}
-
-	//NTT ON N2
-	for(uint64_t i = 0; i < n2; i++){
-		temp = inPlaceNTT_DIT(result + i*n1, n1, p, r);
-		for(uint64_t j = 0; j < n1; j++){
-			result[i*n1 + j] = temp[j];
-		}
-	}
-	
-	//TRANSPOSE
-	for(uint64_t i = 0; i < n2; i++){
-		for(uint64_t j = 0; j < n1; j++){
-			transpose[j*n2 + i] = result[i*n1 + j];
-		}
-	}
-	for(uint64_t i = 0; i < n; i++){
-		result[i] = transpose[i];
-	}
-
-	return result;
-
 }
