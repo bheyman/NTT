@@ -12,7 +12,7 @@ k 	= 2
 
 r	= 2
 
-if my understanding holds, this should now work up to 63 bit primes
+This should now work up to 63 bit primes
 
 To inverse:
 1) perform an NTT with the modulo inverse of the original root
